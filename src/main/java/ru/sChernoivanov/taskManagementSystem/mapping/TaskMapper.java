@@ -18,7 +18,7 @@ public interface TaskMapper {
     Task requestToTask(UpsertTaskRequest upsertTaskRequest);
 
     @Mapping(source = "taskId", target = "id")
-    User requestToTask(Long taskId, UpsertTaskRequest upsertTaskRequest);
+    Task requestToTask(Long taskId, UpsertTaskRequest upsertTaskRequest);
 
 
     TaskResponse taskToResponse(Task task);

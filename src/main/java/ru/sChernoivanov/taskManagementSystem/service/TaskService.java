@@ -16,10 +16,10 @@ public interface TaskService {
 
     List<Task> findAll();
 
-    Task assignPerformer(Long userId);
+    Task assignPerformer(Long userId, Long taskId);
 
-    Task addMessage(Message message);
+    Task addMessage(Message message, Long userId, Long taskId);
 
-    Task changeStatus(Status status);
+    Task changeStatus(Status status, Long taskId);
 }
 

@@ -3,6 +3,7 @@ package ru.sChernoivanov.taskManagementSystem.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Message;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Status;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Task;
@@ -15,11 +16,11 @@ import java.lang.reflect.Field;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserService userService;
-    private final MessageServiceImpl messageServiceImpl;
 
 
     @Override
@@ -63,6 +64,7 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findAll();
     }
 
+
     @Override
     public Task assignPerformer(Long userId, Long taskId) {
         User performer = userService.findById(userId);
@@ -73,14 +75,23 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task addMessage(Message message) {
+    public Task addMessage(Message message, Long userId, Long taskId) {
+        User author = userService.findById(userId);
+        Task task = findById(taskId);
+        author.getMessages().add(message);
+        task.getMessages().add(message);
+        message.setAuthor(author);
+        message.setTask(task);
+        task.setAuthor(author);
 
-        // TODO: 14.01.2025 доделать!!! 
-        return null;
+        return taskRepository.save(task);
     }
 
     @Override
-    public Task changeStatus(Status status) {
-        return null;
+    public Task changeStatus(Status status, Long taskId) {
+        Task task = findById(taskId);
+        task.setStatus(status);
+
+        return taskRepository.save(task);
     }
 }
