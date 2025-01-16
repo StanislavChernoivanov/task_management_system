@@ -2,15 +2,18 @@ package ru.sChernoivanov.taskManagementSystem.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sChernoivanov.taskManagementSystem.model.entity.Message;
-import ru.sChernoivanov.taskManagementSystem.model.entity.Status;
-import ru.sChernoivanov.taskManagementSystem.model.entity.Task;
-import ru.sChernoivanov.taskManagementSystem.model.entity.User;
+import ru.sChernoivanov.taskManagementSystem.model.entity.*;
 import ru.sChernoivanov.taskManagementSystem.model.repository.TaskRepository;
+import ru.sChernoivanov.taskManagementSystem.model.repository.specification.TaskSpecification;
 import ru.sChernoivanov.taskManagementSystem.service.TaskService;
 import ru.sChernoivanov.taskManagementSystem.service.UserService;
+import ru.sChernoivanov.taskManagementSystem.util.BeanUtils;
+import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.pagination.RequestPageableModel;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -35,19 +38,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @SneakyThrows
     public Task update(Long id, Task task) {
         Task updatedtask = findById(id);
-
-        Class<? extends Task> clazz = task.getClass();
-        Field [] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            Object value = field.get(task);
-            if(value != null) {
-                field.set(updatedtask, value);
-            }
-        }
+        BeanUtils.copyNotNullProperties(task, updatedtask);
         
         return taskRepository.save(updatedtask);
     }
@@ -60,8 +53,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAll() {
-        return taskRepository.findAll();
+    public List<Task> findAll(RequestPageableModel paginationData) {
+
+        return taskRepository.findAll(
+                PageRequest.of(paginationData.getPageNumber(), paginationData.getPageSize())
+            ).stream().toList();
+    }
+
+
+    @Override
+    public List<Task> filterBy(Status status,
+                               Priority priority,
+                               Long authorId,
+                               Long performerId,
+                               RequestPageableModel model) {
+
+        return taskRepository.findAll(
+                TaskSpecification.withFilter(status, priority, authorId, performerId),
+                PageRequest.of(model.getPageNumber(),
+                        model.getPageSize())).stream().toList();
     }
 
 

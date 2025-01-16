@@ -1,5 +1,8 @@
 package ru.sChernoivanov.taskManagementSystem.contoller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +22,9 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> findById(@PathVariable
+                                                     @Positive(message = "Параметр должен быть больше 0")
+                                                     @NotNull(message = "Задайте параметр")  Long id) {
         return ResponseEntity.ok(
                 userMapper.userToResponse(userService.findById(id))
         );
@@ -27,7 +32,7 @@ public class UserController {
 
 
     @PostMapping("/createAcc")
-    public ResponseEntity<UserResponse> createAccount(@RequestBody UpsertUserRequest userRequest,
+    public ResponseEntity<UserResponse> createAccount(@RequestBody @Valid UpsertUserRequest userRequest,
                                                       @RequestParam RoleType roleType) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userMapper.userToResponse(

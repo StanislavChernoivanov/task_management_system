@@ -1,8 +1,10 @@
 package ru.sChernoivanov.taskManagementSystem.service;
 
 import ru.sChernoivanov.taskManagementSystem.model.entity.Message;
+import ru.sChernoivanov.taskManagementSystem.model.entity.Priority;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Status;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Task;
+import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.pagination.RequestPageableModel;
 
 import java.util.List;
 
@@ -14,7 +16,13 @@ public interface TaskService {
 
     Task findById(Long id);
 
-    List<Task> findAll();
+    List<Task> findAll(RequestPageableModel paginationData);
+
+    List<Task> filterBy(Status status,
+                        Priority priority,
+                        Long authorId,
+                        Long performerId,
+                        RequestPageableModel model);
 
     Task assignPerformer(Long userId, Long taskId);
 
