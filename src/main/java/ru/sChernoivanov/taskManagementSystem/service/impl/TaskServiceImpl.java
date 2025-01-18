@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sChernoivanov.taskManagementSystem.exception.EntityNotFoundException;
 import ru.sChernoivanov.taskManagementSystem.model.entity.*;
 import ru.sChernoivanov.taskManagementSystem.model.repository.TaskRepository;
 import ru.sChernoivanov.taskManagementSystem.model.repository.specification.TaskSpecification;
@@ -48,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task findById(Long id) {
         return taskRepository.findById(id).orElseThrow(
-                () ->  new RuntimeException(String.format("Задача с id - %s не найдена", id))
+                () ->  new EntityNotFoundException(String.format("Задача с id - %s не найдена", id))
         );
     }
 

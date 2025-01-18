@@ -9,7 +9,7 @@ public interface UserService {
 
     User findById(Long userId);
 
-    User createNewAccount(User user, RoleType roleType);
+    User createNewAccount(User user);
 
     User findByUsername(String username);
 

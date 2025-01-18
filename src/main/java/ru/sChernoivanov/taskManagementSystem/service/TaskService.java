@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface TaskService {
 
-    Task create(Long authorId, Long performerId, Task task);
+    Task create(Long performerId, Task task);
 
     Task update(Long id, Task task);
 
@@ -20,13 +20,12 @@ public interface TaskService {
 
     List<Task> filterBy(Status status,
                         Priority priority,
-                        Long authorId,
                         Long performerId,
                         RequestPageableModel model);
 
     Task assignPerformer(Long userId, Long taskId);
 
-    Task addMessage(Message message, Long userId, Long taskId);
+    Task addMessage(Message message, Long taskId);
 
     Task changeStatus(Status status, Long taskId);
 }

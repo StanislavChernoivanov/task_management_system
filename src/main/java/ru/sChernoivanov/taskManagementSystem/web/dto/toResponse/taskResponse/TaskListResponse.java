@@ -1,5 +1,6 @@
 package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "task's info list")
 public class TaskListResponse {
 
+    @Schema(description = "task's list")
     private List<TaskResponse> tasks;
 }

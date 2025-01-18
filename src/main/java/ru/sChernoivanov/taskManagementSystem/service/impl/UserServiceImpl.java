@@ -3,6 +3,7 @@ package ru.sChernoivanov.taskManagementSystem.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sChernoivanov.taskManagementSystem.exception.EntityNotFoundException;
 import ru.sChernoivanov.taskManagementSystem.model.entity.RoleType;
 import ru.sChernoivanov.taskManagementSystem.model.entity.User;
 import ru.sChernoivanov.taskManagementSystem.model.repository.UserRepository;
@@ -19,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException(String.format(
+                () -> new EntityNotFoundException(String.format(
                         "Пользователь с id - %s не найден", userId
                 ))
         );
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByName(username).orElseThrow(
-                () -> new RuntimeException(String.format(
+                () -> new EntityNotFoundException(String.format(
                         "Пользователь с именем - %s не найден", username
                 ))
         );

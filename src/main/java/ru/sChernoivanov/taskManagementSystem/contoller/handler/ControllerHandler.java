@@ -1,4 +1,4 @@
-package ru.sChernoivanov.taskManagementSystem.contoller;
+package ru.sChernoivanov.taskManagementSystem.contoller.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -17,6 +17,7 @@ import java.util.List;
 @ControllerAdvice
 @Slf4j
 public class ControllerHandler {
+
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> notFound(EntityNotFoundException ex) {

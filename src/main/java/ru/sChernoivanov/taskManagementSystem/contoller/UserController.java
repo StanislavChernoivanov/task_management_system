@@ -1,5 +1,10 @@
 package ru.sChernoivanov.taskManagementSystem.contoller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,6 +16,8 @@ import ru.sChernoivanov.taskManagementSystem.mapping.UserMapper;
 import ru.sChernoivanov.taskManagementSystem.model.entity.RoleType;
 import ru.sChernoivanov.taskManagementSystem.service.UserService;
 import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.UpsertUserRequest;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.ErrorResponse;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse.TaskResponse;
 import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse.UserResponse;
 
 @RestController
@@ -21,24 +28,36 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> findById(@PathVariable
-                                                     @Positive(message = "Параметр должен быть больше 0")
-                                                     @NotNull(message = "Задайте параметр")  Long id) {
-        return ResponseEntity.ok(
-                userMapper.userToResponse(userService.findById(id))
-        );
-    }
 
 
+    @Operation(
+            summary = "Create new account",
+            description = "Create new account" +
+                    ", return new Account",
+            tags = {"user"}
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    content = @Content(
+                            schema = @Schema(implementation = TaskResponse.class),
+                            mediaType = "application/json"
+                    )
+            )
+            ,
+            @ApiResponse(
+                    responseCode = "400",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            mediaType = "application/json"
+                    )
+            )
+    })
     @PostMapping("/createAcc")
-    public ResponseEntity<UserResponse> createAccount(@RequestBody @Valid UpsertUserRequest userRequest,
-                                                      @RequestParam RoleType roleType) {
+    public ResponseEntity<UserResponse> createAccount(@RequestBody @Valid UpsertUserRequest userRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userMapper.userToResponse(
-                        userService.createNewAccount(
-                                userMapper.requestToUser(userRequest), roleType
-                        )
+                        userService.createNewAccount(userMapper.requestToUser(userRequest))
                 ));
     }
 

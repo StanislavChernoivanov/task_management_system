@@ -6,11 +6,10 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.sChernoivanov.taskManagementSystem.converter.PriorityConverter;
 import ru.sChernoivanov.taskManagementSystem.converter.StatusConverter;
-import ru.sChernoivanov.taskManagementSystem.model.entity.Priority;
 
 @Configuration
 @RequiredArgsConstructor
-public class ConversionConfig implements WebMvcConfigurer {
+public class ConversionConfiguration implements WebMvcConfigurer {
 
     private final PriorityConverter priorityConverter;
     private final StatusConverter statusConverter;
