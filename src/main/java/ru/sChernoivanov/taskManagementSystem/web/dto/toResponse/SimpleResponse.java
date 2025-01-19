@@ -7,13 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "error")
+@NoArgsConstructor
 @Builder
-public class ErrorResponse {
+@Schema(description = "simple response")
+public class SimpleResponse {
 
-    @Schema(description = "error message")
-    private String errorMessage;
+
+    @Schema(description = "response message")
+    private String message;
 }
-

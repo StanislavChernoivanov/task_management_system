@@ -1,4 +1,4 @@
-package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse;
+package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Priority;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Status;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.messageResponse.MessageResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse.UserResponse;
 
 import java.util.List;
 

@@ -14,17 +14,22 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import ru.sChernoivanov.aop.CheckAccess;
 import ru.sChernoivanov.taskManagementSystem.mapping.TaskMapper;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Message;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Priority;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Status;
 import ru.sChernoivanov.taskManagementSystem.service.TaskService;
+import ru.sChernoivanov.taskManagementSystem.service.UserService;
+import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.RequestPageableModel;
 import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.UpsertTaskRequest;
-import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.pagination.RequestPageableModel;
 import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.ErrorResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse.TaskListResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse.TaskResponse;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.TaskListResponse;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.TaskResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,34 +39,7 @@ public class TaskController {
 
     private final TaskService taskService;
     private final TaskMapper taskMapper;
-
-
-    @Operation(
-            summary = "Get all tasks",
-            description = "Get all tasks" +
-                    ", return task's list",
-            tags = {"task"}
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    content = @Content(
-                            schema = @Schema(implementation = TaskListResponse.class),
-                            mediaType = "application/json"
-                    )
-            ),
-            @ApiResponse(responseCode = "401"),
-            @ApiResponse(responseCode = "403")
-    })
-    @GetMapping
-    public ResponseEntity<TaskListResponse> findAll(@RequestBody @Valid RequestPageableModel requestPageableModel) {
-
-        return ResponseEntity.ok(
-                taskMapper.taskListToTaskResponseList(
-                        taskService.findAll(requestPageableModel)
-                )
-        );
-    }
+    private final UserService userService;
 
 
     @Operation(
@@ -88,34 +66,40 @@ public class TaskController {
             @ApiResponse(responseCode = "401"),
             @ApiResponse(responseCode = "403")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/filterBy")
     public ResponseEntity<TaskListResponse> filterBy(
-                                                    @RequestParam
-                                                    @Parameter(description = "task status",
-                                                            allowEmptyValue = true,
-                                                            examples = {
-                                                                    @ExampleObject(value = "WAIT"),
-                                                                    @ExampleObject(value = "IN_PROCESS"),
-                                                                    @ExampleObject(value = "DONE")
-                                                            }) Status status,
-                                                    @RequestParam
-                                                    @Parameter(description = "task priority",
-                                                            allowEmptyValue = true,
-                                                            examples = {
-                                                                    @ExampleObject(value = "LOW"),
-                                                                    @ExampleObject(value = "MIDDLE"),
-                                                                    @ExampleObject(value = "HIGH")
-                                                            }) Priority priority,
-                                                    @RequestParam
-                                                    @Positive(message = "Параметр должен быть больше 0")
-                                                    @NotNull(message = "Задайте параметр")
-                                                    @Parameter(description = "performer id",
-                                                            allowEmptyValue = true) Long performerId,
-                                                    @RequestBody @Valid RequestPageableModel model) {
+            @RequestParam
+            @Parameter(description = "task status",
+                    allowEmptyValue = true,
+                    examples = {
+                            @ExampleObject(value = "WAIT"),
+                            @ExampleObject(value = "IN_PROCESS"),
+                            @ExampleObject(value = "DONE")
+                    }) Status status,
+            @RequestParam
+            @Parameter(description = "task priority",
+                    allowEmptyValue = true,
+                    examples = {
+                            @ExampleObject(value = "LOW"),
+                            @ExampleObject(value = "MIDDLE"),
+                            @ExampleObject(value = "HIGH")
+                    }) Priority priority,
+            @RequestParam
+            @Positive(message = "Параметр должен быть больше 0")
+            @NotNull(message = "Задайте параметр")
+            @Parameter(description = "performer id",
+                    allowEmptyValue = true) Long performerId,
+            @RequestBody @Valid RequestPageableModel model,
+            @RequestParam
+            @Positive(message = "Параметр должен быть больше 0")
+            @NotNull(message = "Задайте параметр")
+            @Parameter(description = "author id",
+                    allowEmptyValue = true) Long authorId) {
 
         return ResponseEntity.ok(
                 taskMapper.taskListToTaskResponseList(
-                        taskService.filterBy(status, priority, performerId, model)
+                        taskService.filterBy(status, priority, authorId, performerId, model)
                 )
         );
     }
@@ -151,6 +135,7 @@ public class TaskController {
 
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> findById(@PathVariable
                                                  @Positive(message = "Параметр должен быть больше 0")
@@ -193,16 +178,19 @@ public class TaskController {
 
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<TaskResponse> create(@RequestBody @Valid UpsertTaskRequest taskRequest,
-                                               @RequestParam
+    public ResponseEntity<TaskResponse> create(@AuthenticationPrincipal UserDetails userDetails,
+                                               @RequestBody @Valid UpsertTaskRequest taskRequest,
+                                               @RequestParam(required = false)
                                                @Positive(message = "Параметр должен быть больше 0")
-                                               @NotNull(message = "Задайте параметр")
-                                               @Parameter(description = "performer id",
-                                                       required = true) Long performerId) {
+                                               @Parameter(description = "performer id") Long performerId) {
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(taskMapper.taskToResponse(
-                        taskService.create(performerId, taskMapper.requestToTask(taskRequest)
+                        taskService.create(userService.findByEmail(userDetails.getUsername()).getId(),
+                                performerId,
+                                taskMapper.requestToTask(taskRequest)
                         )));
     }
 
@@ -239,6 +227,7 @@ public class TaskController {
 
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> update(@PathVariable
                                                @Positive(message = "Параметр должен быть больше 0")
@@ -286,6 +275,7 @@ public class TaskController {
 
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/performer/{id}")
     public ResponseEntity<TaskResponse> assignPerformer(@PathVariable
                                                         @Positive(message = "Параметр должен быть больше 0")
@@ -343,8 +333,10 @@ public class TaskController {
 
             )
     })
+    @CheckAccess
     @PatchMapping("/message/{id}")
-    public ResponseEntity<TaskResponse> addMessage(@PathVariable
+    public ResponseEntity<TaskResponse> addMessage(@AuthenticationPrincipal UserDetails userDetails,
+                                                   @PathVariable
                                                    @Positive(message = "Параметр должен быть больше 0")
                                                    @NotNull(message = "Задайте параметр")
                                                    @Parameter(description = "task id",
@@ -352,7 +344,9 @@ public class TaskController {
                                                    @RequestBody @Valid Message message) {
         return ResponseEntity.ok(
                 taskMapper.taskToResponse(
-                        taskService.addMessage(message, taskId)
+                        taskService.addMessage(message,
+                                userService.findByEmail(userDetails.getUsername()).getId(),
+                                taskId)
                 )
         );
     }
@@ -396,11 +390,14 @@ public class TaskController {
 
             )
     })
+    @CheckAccess
     @PatchMapping("/status/{id}")
-    public ResponseEntity<TaskResponse> changeStatus(@PathVariable
+    public ResponseEntity<TaskResponse> changeStatus(@AuthenticationPrincipal UserDetails userDetails,
+                                                     @PathVariable
                                                      @Positive(message = "Параметр должен быть больше 0")
                                                      @NotNull(message = "Задайте параметр") Long taskId,
                                                      @RequestBody @Valid Status status) {
+
         return ResponseEntity.ok(
                 taskMapper.taskToResponse(
                         taskService.changeStatus(status, taskId)

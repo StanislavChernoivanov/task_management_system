@@ -1,4 +1,4 @@
-package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse;
+package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

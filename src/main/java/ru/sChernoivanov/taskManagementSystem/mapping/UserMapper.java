@@ -4,19 +4,19 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import ru.sChernoivanov.taskManagementSystem.model.entity.User;
-import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.UpsertUserRequest;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse.UserListResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse.UserResponse;
+import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.CreateUserRequest;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.UserListResponse;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.UserResponse;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
-    User requestToUser(UpsertUserRequest upsertUserRequest);
+    User requestToUser(CreateUserRequest createUserRequest);
 
     @Mapping(source = "userId", target = "id")
-    User requestToUser(Long userId, UpsertUserRequest upsertUserRequest);
+    User requestToUser(Long userId, CreateUserRequest createUserRequest);
 
 
     UserResponse userToResponse(User user);

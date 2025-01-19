@@ -1,9 +1,6 @@
 package ru.sChernoivanov.taskManagementSystem.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +11,10 @@ import ru.sChernoivanov.taskManagementSystem.model.repository.specification.Task
 import ru.sChernoivanov.taskManagementSystem.service.TaskService;
 import ru.sChernoivanov.taskManagementSystem.service.UserService;
 import ru.sChernoivanov.taskManagementSystem.util.BeanUtils;
-import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.pagination.RequestPageableModel;
+import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.RequestPageableModel;
 
-import java.lang.reflect.Field;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -42,14 +39,14 @@ public class TaskServiceImpl implements TaskService {
     public Task update(Long id, Task task) {
         Task updatedtask = findById(id);
         BeanUtils.copyNotNullProperties(task, updatedtask);
-        
+
         return taskRepository.save(updatedtask);
     }
 
     @Override
     public Task findById(Long id) {
         return taskRepository.findById(id).orElseThrow(
-                () ->  new EntityNotFoundException(String.format("Задача с id - %s не найдена", id))
+                () -> new EntityNotFoundException(String.format("Задача с id - %s не найдена", id))
         );
     }
 
@@ -58,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
 
         return taskRepository.findAll(
                 PageRequest.of(paginationData.getPageNumber(), paginationData.getPageSize())
-            ).stream().toList();
+        ).stream().toList();
     }
 
 
@@ -81,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
         User performer = userService.findById(userId);
         Task task = findById(taskId);
         task.setPerformer(performer);
-        
+
         return taskRepository.save(task);
     }
 

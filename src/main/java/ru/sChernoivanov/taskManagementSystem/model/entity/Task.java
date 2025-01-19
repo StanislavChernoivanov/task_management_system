@@ -35,6 +35,6 @@ public class Task implements Serializable {
 
     @EqualsAndHashCode.Exclude
     @Builder.Default
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Message> messages = new ArrayList<>();
 }

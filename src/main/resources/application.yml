@@ -1,4 +1,8 @@
 spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jpa:
     generate-ddl: true
     properties:
@@ -9,7 +13,14 @@ spring:
     username: mysql
     password: mysql
     url: jdbc:mysql://localhost:3310/task_management_system_db
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       schema: task_management_system_schema
       connection-ini-sql: task_management_system_schema
+
+
+app:
+  jwt:
+    secret: taskManagementSystemSecretKey
+    tokenExpiration: 3m
+    refreshTokenExpiration: 30m

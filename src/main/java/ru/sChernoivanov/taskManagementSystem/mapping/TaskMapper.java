@@ -4,13 +4,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Task;
-import ru.sChernoivanov.taskManagementSystem.model.entity.User;
 import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.UpsertTaskRequest;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse.TaskListResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse.TaskResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse.UserListResponse;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.TaskListResponse;
+import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.TaskResponse;
 
 import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TaskMapper {
 

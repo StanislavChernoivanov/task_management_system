@@ -1,12 +1,10 @@
-package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse;
+package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.messageResponse.MessageResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse.TaskResponse;
 
 import java.util.List;
 
@@ -14,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "user info")
-public class UserResponse {
+public class AuthResponse {
+
 
     @Schema(description = "user's id")
     private Long id;
@@ -26,7 +24,13 @@ public class UserResponse {
     @Schema(description = "user email")
     private String email;
 
-    @Schema(description = "task are created by this user")
-    private List<TaskResponse> createdTasks;
+    @Schema(description = "access token")
+    private String token;
+
+    @Schema(description = "refresh token")
+    private String refreshToken;
+
+    @Schema(description = "list of roles")
+    private List<String> roles;
 
 }

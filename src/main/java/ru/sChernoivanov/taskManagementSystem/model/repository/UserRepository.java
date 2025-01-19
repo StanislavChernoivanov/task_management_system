@@ -7,7 +7,13 @@ import ru.sChernoivanov.taskManagementSystem.model.entity.User;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository  extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByName(String name);
+
+    Optional<User> findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByName(String Name);
 }

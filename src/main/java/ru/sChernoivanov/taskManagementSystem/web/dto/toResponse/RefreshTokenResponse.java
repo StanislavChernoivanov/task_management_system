@@ -7,13 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "error")
+@NoArgsConstructor
 @Builder
-public class ErrorResponse {
+@Schema(description = "refresh token response")
+public class RefreshTokenResponse {
 
-    @Schema(description = "error message")
-    private String errorMessage;
+    @Schema(description = "access token")
+    private String accessToken;
+
+    @Schema(description = "refresh token")
+    private String refreshToken;
+
 }
-

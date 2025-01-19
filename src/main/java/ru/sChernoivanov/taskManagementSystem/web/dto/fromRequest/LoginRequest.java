@@ -9,15 +9,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "user entity")
-public class UpsertUserRequest {
-
-    @NotBlank(message = "Имя должно быть заполнено")
-    @Size(min = 2, max = 30, message = "Имя должно содержать не менее {min} символов и не более {max} символов")
-    @Schema(description = "user name", minLength = 2, maxLength = 30)
-    private String name;
+@AllArgsConstructor
+@Builder
+public class LoginRequest {
 
     @NotBlank(message = "Почта должна быть указана")
     @Size(min = 5, max = 80, message = "Почта должна содержать не менее {min} символов и не более {max} символов")

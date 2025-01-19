@@ -1,12 +1,10 @@
-package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.messageResponse;
+package ru.sChernoivanov.taskManagementSystem.web.dto.toResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.taskResponse.TaskResponse;
-import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.userResponse.UserResponse;
 
 @Data
 @AllArgsConstructor

@@ -8,15 +8,12 @@ import ru.sChernoivanov.taskManagementSystem.converter.PriorityConverter;
 import ru.sChernoivanov.taskManagementSystem.converter.StatusConverter;
 
 @Configuration
-@RequiredArgsConstructor
 public class ConversionConfiguration implements WebMvcConfigurer {
 
-    private final PriorityConverter priorityConverter;
-    private final StatusConverter statusConverter;
 
-        @Override
-        public void addFormatters(FormatterRegistry registry) {
-            registry.addConverter(priorityConverter);
-            registry.addConverter(statusConverter);
-        }
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new PriorityConverter());
+        registry.addConverter(new StatusConverter());
+    }
 }
