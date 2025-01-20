@@ -1,11 +1,10 @@
-package ru.sChernoivanov.aop;
+package ru.sChernoivanov.taskManagementSystem.aop;
 
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Task;
@@ -17,11 +16,9 @@ import ru.sChernoivanov.taskManagementSystem.service.UserService;
 @RequiredArgsConstructor
 public class AccessToOperationAspect {
 
-    @Autowired
-    private UserService userService;
 
-    @Autowired
-    private TaskService taskService;
+    private final UserService userService;
+    private final TaskService taskService;
 
 
     @Pointcut("@annotation(ru.sChernoivanov.aop.CheckAccess)")

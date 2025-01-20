@@ -69,7 +69,7 @@ public class SecurityService {
                 .roles(createUSerRequest.getRoles())
                 .roleTypes(createUSerRequest.getRoles().stream().map(
                         role -> RoleType.valueOf(role.name().toUpperCase())).toList()
-                        )
+                )
                 .build();
         userRepository.save(user);
     }

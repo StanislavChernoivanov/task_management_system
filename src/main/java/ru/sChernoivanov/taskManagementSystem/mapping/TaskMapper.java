@@ -2,6 +2,7 @@ package ru.sChernoivanov.taskManagementSystem.mapping;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Task;
 import ru.sChernoivanov.taskManagementSystem.web.dto.fromRequest.UpsertTaskRequest;
@@ -10,7 +11,7 @@ import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.TaskResponse;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TaskMapper {
 
 
@@ -27,7 +28,7 @@ public interface TaskMapper {
     default TaskListResponse taskListToTaskResponseList(List<Task> tasks) {
         var taskListResponse = new TaskListResponse();
         taskListResponse.setTasks(taskListToResponseList(tasks));
-        return taskListResponse;
 
+        return taskListResponse;
     }
 }

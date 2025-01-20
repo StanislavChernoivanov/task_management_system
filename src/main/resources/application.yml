@@ -7,13 +7,13 @@ spring:
     generate-ddl: true
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         hbm2ddl:
           auto: create
   datasource:
     username: mysql
     password: mysql
     url: jdbc:mysql://localhost:3310/task_management_system_db
-    driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       schema: task_management_system_schema
       connection-ini-sql: task_management_system_schema
@@ -24,3 +24,7 @@ app:
     secret: taskManagementSystemSecretKey
     tokenExpiration: 3m
     refreshTokenExpiration: 30m
+
+logging:
+  level:
+    root: info

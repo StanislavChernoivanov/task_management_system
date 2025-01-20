@@ -1,1 +1,1 @@
-CREATE SCHEMA IF NOT EXISTS news_service_schema;
+CREATE SCHEMA IF NOT EXISTS task_management_system_schema;

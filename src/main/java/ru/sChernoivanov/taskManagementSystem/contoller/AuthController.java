@@ -104,8 +104,6 @@ public class AuthController {
     }
 
 
-
-
     @Operation(
             summary = "Refresh token",
             description = "Refresh token" +

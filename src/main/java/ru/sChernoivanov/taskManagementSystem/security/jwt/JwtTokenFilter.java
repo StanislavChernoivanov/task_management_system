@@ -47,6 +47,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.contains("swagger-ui");
+    }
+
     private String getToken(HttpServletRequest request) {
         String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {

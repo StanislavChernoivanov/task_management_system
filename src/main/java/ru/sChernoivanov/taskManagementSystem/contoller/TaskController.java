@@ -12,13 +12,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.sChernoivanov.aop.CheckAccess;
+import ru.sChernoivanov.taskManagementSystem.aop.CheckAccess;
 import ru.sChernoivanov.taskManagementSystem.mapping.TaskMapper;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Message;
 import ru.sChernoivanov.taskManagementSystem.model.entity.Priority;
@@ -38,7 +39,10 @@ import ru.sChernoivanov.taskManagementSystem.web.dto.toResponse.TaskResponse;
 public class TaskController {
 
     private final TaskService taskService;
-    private final TaskMapper taskMapper;
+
+    @Autowired(required = false)
+    private TaskMapper taskMapper;
+
     private final UserService userService;
 
 

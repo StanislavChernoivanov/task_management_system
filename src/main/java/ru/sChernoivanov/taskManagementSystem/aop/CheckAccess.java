@@ -1,4 +1,4 @@
-package ru.sChernoivanov.aop;
+package ru.sChernoivanov.taskManagementSystem.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
